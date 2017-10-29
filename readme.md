@@ -2,10 +2,15 @@
 适用于 x64 位系统
 
 集成以下环境：
+
 Apache 2.4.29 Win64
+
 PHP 5.6 (5.6.32) VC11 x64 Thread Safe
+
 MariaDB 10.2 Series
+
 phpMyAdmin-4.7.5-all-languages
+
 Adminer 4.3.1
 
 ## 下载
