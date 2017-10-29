@@ -1,7 +1,7 @@
 # AndyPHP - PHP 运行环境一键安装包
 适用于 x64 位系统
 
-集成以下软件：
+集成以下环境：
 Apache 2.4.29 Win64
 PHP 5.6 (5.6.32) VC11 x64 Thread Safe
 MariaDB 10.2 Series
@@ -12,16 +12,16 @@ Adminer 4.3.1
 https://github.com/mingfunwong/AndyPHP/archive/master.zip
 
 ## 提示
-启动 Apache 系统需要安装 VC11，可到 http://www.xiazaiba.com/html/6081.html 下载 DirectX Repair V3.5 增强版一键安装。
+启动 Apache 需要系统安装有 VC15 环境，可到 http://www.xiazaiba.com/html/6081.html 下载 DirectX Repair V3.5 增强版一键安装。
 
 ## 使用方法
 
 右击以管理员身份运行 install 即完成安装。
 
 ## 修改虚拟主机
-编辑 Apache24\conf\extra\httpd-vhosts.conf 文件，然后右击以管理员身份运行 apache_restart 重启 apache。
+编辑 Apache24\conf\extra\httpd-vhosts.conf 文件，然后右击以管理员身份运行 apache_restart 重启 apache 即可生效。
 
-## 制作方法
+## 一键安装包制作方法备忘录
 ```
 Apache：
 1. 到 https://www.apachelounge.com/download/ 下载 Apache 2.x.xx Win64 版，解压放到目录里
