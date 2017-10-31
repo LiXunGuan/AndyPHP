@@ -37,8 +37,8 @@ Apache：
 2.1.2 ErrorLog "logs/error.log" 前面加入 # 号
 2.1.3 CustomLog "logs/access.log" common 前面加入 # 号
 2.1.4 修改 LogLevel warn 到 LogLevel crit
-2.1.5 修改LoadModule log_config_module modules/mod_log_config.so 前面加入 # 号
-2.2. 删除 DocumentRoot "c:/Apache24/htdocs"
+2.1.5 修改 LoadModule log_config_module modules/mod_log_config.so 前面加入 # 号
+2.2.6 修改 DocumentRoot "c:/Apache24/htdocs" 前面加入 # 号
 2.3. 删除
 <Directory />
     AllowOverride none
@@ -78,6 +78,7 @@ PHP：
 2. php.ini-development 复制到 php.ini
 3. 修改文件 php.ini
 # extension_dir = "ext" 改为 extension_dir = "../php-5.6.32-Win32-VC11-x64/ext"
+;date.timezone = 改为 date.timezone = Asia/Shanghai
 下面直接覆盖
 extension=php_bz2.dll
 extension=php_curl.dll
