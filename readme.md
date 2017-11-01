@@ -26,7 +26,7 @@ MySQL 用户名： root 密码：空
 运行 install 即完成安装。
 
 ## 修改虚拟主机
-编辑 Apache24\conf\extra\httpd-vhosts.conf 文件，然后运行 apache_restart 重启 apache 即可生效。
+运行 VirtualHost 可直接编辑虚拟主机配置文件，保存并关闭后，将会自动使配置文件生效。
 
 ## 一键安装包制作方法备忘录
 ```

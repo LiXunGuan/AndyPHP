@@ -11,10 +11,11 @@ fltmc >nul 2>&1 || (
 )
 
 call :stop_apache
-call :stop_mysql
+:: call :stop_mysql
 call :start_apache
-call :start_mysql
+:: call :start_mysql
 explorer http://127.0.0.1/
+echo [Success] Installation completed.
 pause
 goto :eof
 
@@ -26,7 +27,6 @@ goto :eof
 :stop_apache
 (sc query .apache | find ".apache">nul && net stop .apache)
 (sc query .apache | find ".apache">nul && sc delete .apache)
-(tasklist /FI "IMAGENAME eq httpd.exe" | find "httpd">nul && taskkill /f /im httpd.exe) 2>&0
 goto :eof
 
 :start_mysql
@@ -37,5 +37,4 @@ goto :eof
 :stop_mysql
 (sc query .mysql | find ".mysql">nul && net stop .mysql)
 (sc query .mysql | find ".mysql">nul && sc delete .mysql)
-(tasklist /FI "IMAGENAME eq mysqld.exe" | find "mysqld">nul && taskkill /f /im mysqld.exe) 2>&0
 goto :eof
