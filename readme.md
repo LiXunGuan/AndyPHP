@@ -69,7 +69,7 @@ Include conf/extra/httpd-vhosts.conf
 </VirtualHost>
 
 <VirtualHost *:80>
-    DocumentRoot "../Sites/domain1.com"
+    DocumentRoot "../Sites/domain1.lvh.me"
     ServerName domain1.lvh.me
 </VirtualHost>
 
