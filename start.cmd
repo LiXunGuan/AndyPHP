@@ -11,9 +11,9 @@ fltmc >nul 2>&1 || (
 )
 
 call :stop_apache
-:: call :stop_mysql
+call :stop_mysql
 call :start_apache
-:: call :start_mysql
+call :start_mysql
 explorer http://127.0.0.1/
 echo [Success] Installation completed.
 pause
