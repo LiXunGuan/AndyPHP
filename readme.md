@@ -1,5 +1,5 @@
 # AndyPHP - PHP 运行环境一键安装包
-适用于 x64 位系统
+适用于 x64 位系统，不能运行在 Windows XP 和 2003。 支持: Windows 7 SP1, Vista SP2, 8 / 8.1, Windows 10, Server 2008 SP2 / R2 SP1, Server 2012 / R2, Server 2016.
 
 集成以下环境：
 
@@ -23,7 +23,7 @@ MySQL 用户名： root 密码：空
 
 ## 使用方法
 
-运行 install 即完成安装。
+运行 start 即可。
 
 ## 修改虚拟主机
 运行 VirtualHost 可直接编辑虚拟主机配置文件，保存并关闭后，将会自动使配置文件生效。
