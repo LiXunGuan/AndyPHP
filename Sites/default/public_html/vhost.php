@@ -72,12 +72,14 @@ function action() {
     if (isset($list[$domain])) {
       return "<div class='alert alert-danger'>域名已存在，点击访问 <a href='http://{$domain}/' target='_blank'>http://{$domain}/</a></div>";
     } else {
-      $dir = pathinfo($_SERVER['DOCUMENT_ROOT'] . "../")['dirname'] . '/' . $dir;
-      $list[$domain] = $dir;
+      $dir1 = substr($_SERVER['DOCUMENT_ROOT'], 0, -19). $dir;
+      $dir2 = $dir1 . '/public_html';
+      $list[$domain] = $dir2;
       save_list($list);
-      if (!file_exists($dir)) {
-        mkdir($dir);
-        file_put_contents("{$dir}/index.html", "<meta charset='utf-8'>虚拟主机创建成功！域名：{$domain}");
+      if (!file_exists($dir2)) {
+        mkdir($dir1);
+        mkdir($dir2);
+        file_put_contents("{$dir2}/index.html", "<meta charset='utf-8'>虚拟主机创建成功！域名：{$domain}");
       }
       return "<div class='alert alert-success'>虚拟主机增加成功，点击访问 <a href='http://{$domain}/' target='_blank'>http://{$domain}/</a></div>";
     }
@@ -94,7 +96,7 @@ function action() {
 
 
 function get_list() {
-  $file = './vhost.txt';
+  $file = './../vhost.txt';
   $content = file_get_contents($file);
   $data = explode("\n", $content);
   $items = array();
@@ -108,7 +110,7 @@ function get_list() {
 }
 
 function save_list($items) {
-  $file = './vhost.txt';
+  $file = './../vhost.txt';
   $data = '';
   foreach ($items as $key => $value) {
     if ($key)
