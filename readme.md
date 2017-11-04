@@ -1,5 +1,5 @@
 # AndyPHP - PHP 运行环境一键安装包
-适用于 x64 位系统，不能运行在 Windows XP 和 2003。 支持: Windows 7 SP1, Vista SP2, 8 / 8.1, Windows 10, Server 2008 SP2 / R2 SP1, Server 2012 / R2, Server 2016.
+能够在线开设虚拟主机、FTP、MySQL。适用于 x64 位系统，不能运行在 Windows XP 和 2003。 支持: Windows 7 SP1, Vista SP2, 8 / 8.1, Windows 10, Server 2008 SP2 / R2 SP1, Server 2012 / R2, Server 2016.
 
 集成以下环境：
 
@@ -8,6 +8,8 @@ Apache 2.4.29 Win64
 PHP 5.6 (5.6.32) VC11 x64 Thread Safe
 
 MariaDB 10.2 Series
+
+FileZilla Server 0.9.60
 
 phpMyAdmin-4.7.5-all-languages
 
@@ -19,14 +21,18 @@ https://github.com/mingfunwong/AndyPHP/archive/master.zip
 ## 提示
 1. 启动 Apache 需要系统安装有 VC15 环境，可到 http://www.xiazaiba.com/html/6081.html 下载 DirectX Repair V3.5 增强版一键安装。
 
-2. MySQL 用户名： root 密码：空
+2. MySQL 账号： root 密码：空
+
+3. 虚拟主机编辑 账号：admin 密码：admin
 
 ## 使用方法
 
-运行 start 即可。
+运行 start 即可启动 Apache 和 MySQL 服务。
+
+运行 ftp_start 启动 FTP 服务。
 
 ## 修改虚拟主机
-访问 http://127.0.0.1/vhost.php 可在线编辑，在线修改无需重启 Apache 。
+访问 http://127.0.0.1/vhost.php 可在线编辑，无需重启 Apache 。
 
 ## 一键安装包制作方法备忘录
 ```
@@ -101,6 +107,9 @@ extension=php_pdo_sqlite.dll
 MariaDB：
 1. 到 https://downloads.mariadb.org/ 下载 MariaDB 10.x Series 版，解压放到目录里
 2. 复制 my-medium.ini 为 my.ini
+
+FileZilla Server：
+1. 到 https://filezilla-project.org/download.php?type=server 下载安装到目录。
 
 phpMyAdmin：
 1. 到 https://www.phpmyadmin.net/downloads/ 下载 phpMyAdmin-4.x.x-all-languages.zip 版，解压放到 Sites\default 目录里
