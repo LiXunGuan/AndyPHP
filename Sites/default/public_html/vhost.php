@@ -100,6 +100,7 @@ error_reporting(0);
           <th width="5%">#</th>
           <th width="15%">域名</th>
           <th>目录</th>
+          <th>创建时间</th>
           <th width="15%">操作</th>
         </tr>
       </thead>
@@ -109,6 +110,7 @@ error_reporting(0);
           <th scope="row"><?php echo $i ?></th>
           <td><a href='http://<?php echo $key ?>/' target='_blank'><?php echo $key ?></a></td>
           <td><?php echo $value ?></td>
+          <td><?php echo date("Y-m-d H:i", filectime($value)) ?></td>
           <td>
             <a href="javascript:if(confirm('是否要删除所选域名？'))window.location='?act=vhost_del&domain=<?php echo $key ?>'">删除</a>
             <a href="javascript:if(confirm('是否要删除所选域名？强制删除将会删除所有文件。'))window.location='?act=vhost_del&force=1&domain=<?php echo $key ?>'">删除并清空</a>
@@ -126,6 +128,7 @@ error_reporting(0);
           <th width="5%">#</th>
           <th width="15%">账号名</th>
           <th>主机</th>
+          <th>容量</th>
           <th width="15%">操作</th>
         </tr>
       </thead>
@@ -135,6 +138,7 @@ error_reporting(0);
           <th scope="row"><?php echo $i ?></th>
           <td><?php echo $value['User'] ?></td>
           <td><?php echo $value['Host'] ?></td>
+          <td><?php echo mysql_count($value['User']) ?></td>
           <td>
             <a href="javascript:if(confirm('是否要删除所选MySQL？'))window.location='?act=mysql_del&user=<?php echo $value['User'] ?>'">删除</a>
             <a href="javascript:if(confirm('是否要删除所选MySQL？？强制删除将会删除所有数据。'))window.location='?act=mysql_del&force=1&user=<?php echo $value['User'] ?>'">删除并清空</a>
@@ -152,6 +156,7 @@ error_reporting(0);
           <th width="5%">#</th>
           <th width="15%">账号名</th>
           <th>目录</th>
+          <th>创建时间</th>
           <th width="15%">操作</th>
         </tr>
       </thead>
@@ -161,6 +166,7 @@ error_reporting(0);
           <th scope="row"><?php echo $i ?></th>
           <td><?php echo $value['username'] ?></td>
           <td><?php echo $value['dir'] ?></td>
+          <td><?php echo date("Y-m-d H:i", filectime($value['dir'])) ?></td>
           <td>
             <a href="javascript:if(confirm('是否要删除所选FTP？'))window.location='?act=ftp_del&id=<?php echo $key ?>'">删除</a>
             <a href="javascript:if(confirm('是否要删除所选FTP？强制删除将会删除所有文件。'))window.location='?act=ftp_del&force=1&id=<?php echo $key ?>'">删除并清空</a>
@@ -179,7 +185,7 @@ function action() {
   echo op_vhost_add();
   // 删除虚拟主机
   echo op_vhost_del();
-  
+
   // 新增 MySQL
   echo op_mysql_add();
   // 删除 MySQL
@@ -416,6 +422,19 @@ function mysql_list() {
   mysqli_close($con);
   return $data;
 }
+
+// 统计数据库容量
+function mysql_count($dbname) {
+  $con = mysqli_connect(MYSQL_HOSTNAME, MYSQL_USERNAME, MYSQL_PASSWORD);
+  if (!$con){die('Could not connect: ' . mysql_error());}
+  $result = mysqli_query($con, "SELECT sum(DATA_LENGTH)+sum(INDEX_LENGTH) as count FROM information_schema.TABLES where TABLE_SCHEMA='{$dbname}';");
+  $data = array();
+  $row = $result->fetch_array(MYSQLI_ASSOC);
+  mysqli_close($con);
+  return round($row['count'] / 1024 / 1024, 2) . " MB";
+}
+
+
 
 function from($array, $key, $default = FALSE)
 {
