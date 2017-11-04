@@ -10,9 +10,9 @@ fltmc >nul 2>&1 || (
 	exit
 )
 
-notepad "Apache24\conf\extra\httpd-vhosts.conf"
+:: notepad "Apache24\conf\extra\httpd-vhosts.conf"
 (sc query .apache | find ".apache">nul && net stop .apache)
 (sc query .apache | find ".apache">nul && net start .apache)
 
-echo [Success] VirtualHost configure is Activated.
+echo [Success] Apache restart completed.
 pause

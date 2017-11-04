@@ -17,16 +17,16 @@ Adminer 4.3.1
 https://github.com/mingfunwong/AndyPHP/archive/master.zip
 
 ## 提示
-启动 Apache 需要系统安装有 VC15 环境，可到 http://www.xiazaiba.com/html/6081.html 下载 DirectX Repair V3.5 增强版一键安装。
+1. 启动 Apache 需要系统安装有 VC15 环境，可到 http://www.xiazaiba.com/html/6081.html 下载 DirectX Repair V3.5 增强版一键安装。
 
-MySQL 用户名： root 密码：空
+2. MySQL 用户名： root 密码：空
 
 ## 使用方法
 
 运行 start 即可。
 
 ## 修改虚拟主机
-运行 VirtualHost 可直接编辑虚拟主机配置文件，保存并关闭后，将会自动使配置文件生效。
+访问 http://127.0.0.1/vhost.php 可在线编辑，在线修改无需重启 Apache 。
 
 ## 一键安装包制作方法备忘录
 ```
@@ -48,7 +48,7 @@ Apache：
 2.5.
 最后在底部加入
 ServerName localhost:80
-DocumentRoot "../Sites"
+DocumentRoot "../Sites/default"
 <Directory />
     Options FollowSymLinks
     DirectoryIndex index.php index.html
@@ -59,19 +59,12 @@ DocumentRoot "../Sites"
 AddType application/x-httpd-php .php
 LoadModule php5_module ../php-5.6.32-Win32-VC11-x64/php5apache2_4.dll
 PHPIniDir ../php-5.6.32-Win32-VC11-x64
-Include conf/extra/httpd-vhosts.conf
-3. 复制 Apache24\conf\extra\httpd-vhosts.conf 为 httpd-vhosts.conf.bak
-4. 覆盖 Apache24\conf\extra\httpd-vhosts.conf 内容是：
-<VirtualHost *:80>
-    DocumentRoot "../Sites/default"
-    ServerName localhost
-    ServerAlias 127.0.0.1
-</VirtualHost>
-
-<VirtualHost *:80>
-    DocumentRoot "../Sites/domain1.lvh.me"
-    ServerName domain1.lvh.me
-</VirtualHost>
+RewriteEngine on
+RewriteMap lowercase int:tolower
+RewriteMap vhost txt:../Sites/default/vhost.txt
+RewriteCond ${lowercase:%{SERVER_NAME}} ^(.+)$
+RewriteCond ${vhost:%1} ^(.*)$
+RewriteRule ^/(.*)$ %1/$1
 
 PHP：
 1. 到 http://windows.php.net/download/ 下载 VC11 x64 Thread Safe 版，解压放到目录里
