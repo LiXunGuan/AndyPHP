@@ -11,6 +11,7 @@ fltmc >nul 2>&1 || (
 )
 
 :: notepad "Apache24\conf\extra\httpd-vhosts.conf"
+Apache24\bin\httpd -t
 (sc query .apache | find ".apache">nul && net stop .apache)
 (sc query .apache | find ".apache">nul && net start .apache)
 
