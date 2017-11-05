@@ -23,7 +23,7 @@ error_reporting(0);
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
+    <title>编辑虚拟主机</title>
 
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 
@@ -35,7 +35,7 @@ error_reporting(0);
         <h1><a href="<?php echo $_SERVER['SCRIPT_URI'] ?>">编辑虚拟主机</a></h1>
       </div>
       <?php echo action() ?>
-      <form class="form-inline" action="" enctype="multipart/form-data" method="post">
+      <form class="form-inline" action="<?php echo $_SERVER['SCRIPT_URI'] ?>" enctype="multipart/form-data" method="post">
 
         <br>
         <input type="checkbox" name="op[vhost]" value="vhost" checked> 虚拟主机：
@@ -53,7 +53,7 @@ error_reporting(0);
         </div>
 
         <br>
-       <input type="checkbox" name="op[mysql]" value="mysql">  MySQL：
+       <input type="checkbox" name="op[mysql]" value="mysql" checked>  MySQL：
         <div class="form-group">
           <label >
             账号
