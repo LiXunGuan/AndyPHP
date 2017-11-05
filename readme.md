@@ -54,7 +54,7 @@ Apache：
 2.5.
 最后在底部加入
 ServerName localhost:80
-DocumentRoot "../Sites/default"
+DocumentRoot "../Sites/default/public_html"
 <Directory />
     Options FollowSymLinks
     DirectoryIndex index.php index.html
@@ -103,6 +103,8 @@ extension=php_pdo_mysql.dll
 extension=php_pdo_sqlite.dll
 ;extension=php_pgsql.dll
 ;extension=php_shmop.dll
+
+4. libssh2.dll 复制到 Apache24\bin 目录。
 
 MariaDB：
 1. 到 https://downloads.mariadb.org/ 下载 MariaDB 10.x Series 版，解压放到目录里
