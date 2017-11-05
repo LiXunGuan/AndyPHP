@@ -25,6 +25,8 @@ https://github.com/mingfunwong/AndyPHP/archive/master.zip
 
 3. 虚拟主机编辑 账号：admin 密码：admin
 
+4. 如启动后 PHP 不支持 cURL 则需要把 PHP 目录的 ssleay32.dll libssh2.dll libeay32.dll 三个文件复制到 C:\Windows\System32 目录。
+
 ## 使用方法
 
 运行 start 即可启动 Apache 和 MySQL 服务。
