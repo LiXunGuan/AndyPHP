@@ -48,6 +48,7 @@ Apache：
 2.1.5 修改 LoadModule log_config_module modules/mod_log_config.so 前面加入 # 号
 2.2.6 修改 DocumentRoot "c:/Apache24/htdocs" 前面加入 # 号
 2.2.7 修改 #LoadModule deflate_module modules/mod_deflate.so 去除前面 # 号
+2.2.7 修改 #LoadModule filter_module modules/mod_filter.so 去除前面 # 号
 2.3. 删除
 <Directory />
     AllowOverride none
