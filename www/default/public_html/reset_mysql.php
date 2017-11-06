@@ -3,7 +3,7 @@
 <?php
 define('MYSQL_HOSTNAME', 'localhost');
 define('MYSQL_USERNAME', 'root');
-define('MYSQL_PASSWORD', 'bBG5q9MxPo');
+define('MYSQL_PASSWORD', 'CFlIamMvUH');
 
 $new_password = random();
 
@@ -15,22 +15,28 @@ mysqli_query($con, $sql);
 
 $user = 'root';
 $host = '127.0.0.1';
-$sql = "REVOKE ALL PRIVILEGES ON `{$user}`.* FROM '{$user}'@'{$host}';DROP USER '{$user}'@'{$host}';";
+$sql = "REVOKE ALL PRIVILEGES ON `{$user}`.* FROM '{$user}'@'{$host}';";
+mysqli_query($con, $sql);
+$sql = "DROP USER '{$user}'@'{$host}';";
 mysqli_query($con, $sql);
 
 $user = 'root';
-$host = ' ::1';
-$sql = "REVOKE ALL PRIVILEGES ON `{$user}`.* FROM '{$user}'@'{$host}';DROP USER '{$user}'@'{$host}';";
+$host = '::1';
+$sql = "REVOKE ALL PRIVILEGES ON `{$user}`.* FROM '{$user}'@'{$host}';";
+mysqli_query($con, $sql);
+$sql = "DROP USER '{$user}'@'{$host}';";
 mysqli_query($con, $sql);
 
 $user = '';
 $host = 'localhost';
-$sql = "REVOKE ALL PRIVILEGES ON `{$user}`.* FROM '{$user}'@'{$host}';DROP USER '{$user}'@'{$host}';";
+$sql = "REVOKE ALL PRIVILEGES ON `{$user}`.* FROM '{$user}'@'{$host}';";
+mysqli_query($con, $sql);
+$sql = "DROP USER '{$user}'@'{$host}';";
 mysqli_query($con, $sql);
 
 mysqli_close($con);
 
-echo "设置成功，新密码：{$new_password}";
+echo "MySQL 密码设置成功";
 
 $file = "./reset_mysql.php";
 $content = file_get_contents($file);

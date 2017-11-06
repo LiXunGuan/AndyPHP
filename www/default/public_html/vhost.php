@@ -16,7 +16,7 @@ define('VHOST_DIR', ANDYPHP_DIR . 'apache/conf/vhost/');
 define('FTP_FILE',  ANDYPHP_DIR . 'ftp/FileZilla Server.xml');
 define('MYSQL_HOSTNAME', 'localhost');
 define('MYSQL_USERNAME', 'root');
-define('MYSQL_PASSWORD', '');
+define('MYSQL_PASSWORD', 'CFlIamMvUH');
 // error_reporting(0);
 ajax();
 ?>
