@@ -21,7 +21,7 @@ https://github.com/mingfunwong/AndyPHP/archive/master.zip
 ## 提示
 1. 启动 Apache 需要系统安装有 VC15 环境，可到 http://www.xiazaiba.com/html/6081.html 下载 DirectX Repair V3.5 增强版一键安装。
 
-2. MySQL 账号： root 密码：空
+2. MySQL 账号： root 密码：空 ，建议访问 http://127.0.0.1/reset_mysql.php 重设密码。
 
 3. 虚拟主机编辑 账号：admin 密码：admin
 
@@ -34,7 +34,7 @@ https://github.com/mingfunwong/AndyPHP/archive/master.zip
 运行 ftp_start 启动 FTP 服务。
 
 ## 修改虚拟主机
-访问 http://127.0.0.1/vhost.php 可在线编辑，无需重启 Apache 。
+访问 http://127.0.0.1/vhost.php 可在线编辑。
 
 ## 一键安装包制作方法备忘录
 ```

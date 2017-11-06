@@ -3,7 +3,7 @@
 <?php
 define('MYSQL_HOSTNAME', 'localhost');
 define('MYSQL_USERNAME', 'root');
-define('MYSQL_PASSWORD', 'CFlIamMvUH');
+define('MYSQL_PASSWORD', '');
 
 $new_password = random();
 
@@ -11,6 +11,9 @@ $con = mysqli_connect(MYSQL_HOSTNAME, MYSQL_USERNAME, MYSQL_PASSWORD);
 if (!$con){die('Could not connect: ' . mysql_error());}
 
 $sql = "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('{$new_password}');";
+mysqli_query($con, $sql);
+
+$sql = "DROP DATABASE `test`;";
 mysqli_query($con, $sql);
 
 $user = 'root';
