@@ -78,9 +78,9 @@ RewriteRule ^/(.*)$ %1/$1
 
 2.6 在 apache\conf\ 新建目录 vhost ，新建文件 00000.default.conf 写入以下内容
 <VirtualHost *:80>
-DocumentRoot ../www/default
+DocumentRoot ../www/default/public_html
 </VirtualHost>
-<Directory ../www/default>
+<Directory ../www/default/public_html>
     Options FollowSymLinks
     AllowOverride None
     Order allow,deny
