@@ -69,6 +69,7 @@ DocumentRoot ../www/default/public_html
 </VirtualHost>
 <Directory ../www/default>
     Options FollowSymLinks
+    DirectoryIndex index.php index.html
     AllowOverride All
     Order allow,deny
     Allow from all

@@ -9,12 +9,16 @@ switch (true) {
         header('Content-Type: text/plain; charset=utf-8');
         die('Enter username and password.');
 }
-define('VHOST_FILE', './../vhost.txt');
-define('FTP_FILE', './../../../ftp/FileZilla Server.xml');
-\define('MYSQL_HOSTNAME', 'localhost');
+// define('VHOST_FILE', './../vhost.txt');
+define('WWW_DIR', substr($_SERVER['DOCUMENT_ROOT'], 0, -19));
+define('ANDYPHP_DIR', substr($_SERVER['DOCUMENT_ROOT'], 0, -23));
+define('VHOST_DIR', ANDYPHP_DIR . 'apache/conf/vhost/');
+define('FTP_FILE',  ANDYPHP_DIR . 'ftp/FileZilla Server.xml');
+define('MYSQL_HOSTNAME', 'localhost');
 define('MYSQL_USERNAME', 'root');
 define('MYSQL_PASSWORD', '');
-error_reporting(0);
+// error_reporting(0);
+ajax();
 ?>
 
 <!DOCTYPE html>
@@ -26,16 +30,19 @@ error_reporting(0);
     <title>编辑虚拟主机</title>
 
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
 
   </head>
   <body>
 
     <div class="container">
       <div class="page-header">
-        <h1><a href="<?php echo $_SERVER['SCRIPT_URI'] ?>">编辑虚拟主机</a></h1>
+        <h1><a href="<?php echo $_SERVER['PHP_SELF'] ?>">编辑虚拟主机</a></h1>
       </div>
       <?php echo action() ?>
-      <form class="form-inline" action="<?php echo $_SERVER['SCRIPT_URI'] ?>" enctype="multipart/form-data" method="post">
+      <form class="form-inline" action="<?php echo $_SERVER['PHP_SELF'] ?>" enctype="multipart/form-data" method="post">
 
         <br>
         <input type="checkbox" name="op[vhost]" value="vhost" checked> 虚拟主机：
@@ -43,6 +50,12 @@ error_reporting(0);
           <label >
             域名
             <input type="text" class="form-control" value="1.lvh.me" name="vhost_domain">
+          </label>
+        </div>
+        <div class="form-group">
+          <label >
+            别名
+            <input type="text" class="form-control" value="" name="vhost_alias">
           </label>
         </div>
         <div class="form-group">
@@ -93,12 +106,16 @@ error_reporting(0);
       </form>
 
       <br>
-      <h3>虚拟主机列表</h3>
+      <h3>
+        虚拟主机列表
+        <button type="submit" class="btn btn-default" onclick="javascript:ajax_restart('虚拟主机')">重启</button>
+      </h3>
       <table class="table table-condensed">
       <thead>
         <tr>
           <th width="5%">#</th>
           <th width="15%">域名</th>
+          <th>别名</th>
           <th>目录</th>
           <th>创建时间</th>
           <th width="15%">操作</th>
@@ -108,9 +125,10 @@ error_reporting(0);
       <?php $i = 0; foreach (vhost_list() as $key => $value) : $i++; ?>
         <tr>
           <th scope="row"><?php echo $i ?></th>
-          <td><a href='http://<?php echo $key ?>/' target='_blank'><?php echo $key ?></a></td>
-          <td><?php echo $value ?></td>
-          <td><?php echo date("Y-m-d H:i", filectime($value)) ?></td>
+          <td><a href='http://<?php echo $value['domain'] ?>/' target='_blank'><?php echo $value['domain'] ?></a></td>
+          <td><?php echo $value['alias'] ?></td>
+          <td><?php echo $value['dir'] ?></td>
+          <td><?php echo date("Y-m-d H:i", filectime(WWW_DIR . $value['dir'])) ?></td>
           <td>
             <a href="javascript:if(confirm('是否要删除所选域名？'))window.location='?act=vhost_del&domain=<?php echo $key ?>'">删除</a>
             <a href="javascript:if(confirm('是否要删除所选域名？强制删除将会删除所有文件。'))window.location='?act=vhost_del&force=1&domain=<?php echo $key ?>'">删除并清空</a>
@@ -121,13 +139,17 @@ error_reporting(0);
       </table>
 
       <br>
-      <h3>MySQL 列表</h3>
+      <h3>
+        MySQL 列表
+        <button type="submit" class="btn btn-default" onclick="javascript:ajax_restart('MySQL')">重启</button>
+      </h3>
       <table class="table table-condensed">
       <thead>
         <tr>
           <th width="5%">#</th>
           <th width="15%">账号名</th>
           <th>主机</th>
+          <th>密码</th>
           <th>容量</th>
           <th width="15%">操作</th>
         </tr>
@@ -138,10 +160,11 @@ error_reporting(0);
           <th scope="row"><?php echo $i ?></th>
           <td><?php echo $value['User'] ?></td>
           <td><?php echo $value['Host'] ?></td>
+          <td><?php echo $value['Password'] ? "有" : "无" ?></td>
           <td><?php echo mysql_count($value['User']) ?></td>
           <td>
-            <a href="javascript:if(confirm('是否要删除所选MySQL？'))window.location='?act=mysql_del&user=<?php echo $value['User'] ?>'">删除</a>
-            <a href="javascript:if(confirm('是否要删除所选MySQL？？强制删除将会删除所有数据。'))window.location='?act=mysql_del&force=1&user=<?php echo $value['User'] ?>'">删除并清空</a>
+            <a href="javascript:if(confirm('是否要删除所选MySQL？'))window.location='?act=mysql_del&user=<?php echo $value['User'] ?>&host=<?php echo $value['Host'] ?>'">删除</a>
+            <a href="javascript:if(confirm('是否要删除所选MySQL？？强制删除将会删除所有数据。'))window.location='?act=mysql_del&force=1&user=<?php echo $value['User'] ?>&host=<?php echo $value['Host'] ?>'">删除并清空</a>
           </td>
         </tr>
       <?php endforeach; ?>
@@ -149,7 +172,9 @@ error_reporting(0);
       </table>
 
       <br>
-      <h3>FTP 列表</h3>
+      <h3>FTP 列表
+        <button type="submit" class="btn btn-default" onclick="javascript:ajax_restart('FTP')">重启</button>
+      </h3>
       <table class="table table-condensed">
       <thead>
         <tr>
@@ -198,6 +223,81 @@ function action() {
 
 }
 
+
+// 获取虚拟主机
+function vhost_list() {
+  $items = array();
+  $dh=opendir(VHOST_DIR);
+  while ($file=readdir($dh)) {
+    if($file!="." && $file!="..") {
+      $fullpath=VHOST_DIR."/".$file;
+      $content = file_get_contents($fullpath);
+      preg_match("/ServerName (.*)/", $content, $domain);
+      $domain = from($domain, 1);
+      preg_match("/ServerAlias (.*)/", $content, $alias);
+      $alias = from($alias, 1);
+      preg_match("/DocumentRoot (.*)/", $content, $dir);
+      $dir = from($dir, 1);
+      $dir = str_replace('../www/', '', $dir);
+      $dir = str_replace('/public_html', '', $dir);
+      $items[$file] = array(
+        'domain' => ($domain) ? $domain : "localhost",
+        'alias' => $alias,
+        'dir' => $dir,
+      );
+    }
+  }
+  return $items;
+}
+
+// 增加虚拟主机
+function op_vhost_add() {
+  if (in_array('vhost', from($_POST, 'op', array()))) {
+    $domain = from($_POST, 'vhost_domain');
+    $alias = from($_POST, 'vhost_alias');
+    $dir = from($_POST, 'vhost_dir');
+    if (!$domain) return "<div class='alert alert-danger'>请填写域名</div>";
+    if (!$dir) return "<div class='alert alert-danger'>请填写目录</div>";
+    $list = vhost_list();
+    $dir1 = WWW_DIR . $dir;
+    $dir2 = $dir1 . '/public_html';
+    $file = "{$domain}.conf";
+    $fullpath = VHOST_DIR . $file;
+    $content = '<VirtualHost *:80>\nDocumentRoot ../www/'.$dir.'/public_html\nServerName '.$domain.'\nServerAlias '.$alias.'\nphp_admin_value open_basedir '.WWW_DIR.$dir.';C:/Windows/TEMP\n<IfModule mod_bw.c>\nBandWidthModule On\nForceBandWidthModule On\nBandWidth all 10240000\nMaxConnection all 100\n</IfModule>\n<IfModule mod_deflate.c>\nDeflateCompressionLevel 7\nAddOutputFilterByType DEFLATE text/html text/plain text/xml application/x-httpd-php\nAddOutputFilter DEFLATE css js html htm gif jpg png bmp php\n</IfModule>\n</VirtualHost>\n<Directory ../www/'.$dir.'>\n    Options FollowSymLinks\n  DirectoryIndex index.php index.html\n    AllowOverride All\n    Order allow,deny\n    Allow from all\n</Directory>\n';
+    $content = str_replace('\n', "\n", $content);
+    $old_content = (file_exists($fullpath)) ? file_get_contents($fullpath) : "";
+    if ($old_content != $content) {
+      $index_file = "{$dir2}/index.html";
+      file_put_contents($fullpath, $content);
+      !file_exists($dir1) && mkdir($dir1);
+      !file_exists($dir2) && mkdir($dir2);
+      !file_exists($index_file) && file_put_contents($index_file, "<meta charset='utf-8'>虚拟主机创建成功！域名：{$domain}");
+    }
+    return "<div class='alert alert-success'>虚拟主机增加成功，重启主机后生效，点击重启 <a href='javascript:ajax_restart(\"虚拟主机\");' >重启</a>。点击访问 <a href='http://{$domain}/' target='_blank'>http://{$domain}/</a></div>";
+  }
+}
+
+// 删除虚拟主机
+function op_vhost_del() {
+  if (from($_GET, 'act') == 'vhost_del') {
+    $domain = from($_GET, 'domain');
+    $force = from($_GET, 'force');
+    $list = vhost_list();
+    if ($domain == '00000.default.conf') {
+      return "<div class='alert alert-danger'>系统虚拟主机不能删除</div>"; 
+    }
+    if (isset($list[$domain])) {
+      if ($force) {
+        $fullpath = WWW_DIR . $list[$domain]['dir'];
+        deldir($fullpath);
+      }
+      unlink(VHOST_DIR . $domain);
+    }
+    return "<div class='alert alert-success'>域名删除成功</div>";
+  }
+}
+
+/*
 // 增加虚拟主机
 function op_vhost_add() {
   if (in_array('vhost', from($_POST, 'op', array()))) {
@@ -209,7 +309,7 @@ function op_vhost_add() {
     if (isset($list[$domain])) {
       return "<div class='alert alert-danger'>域名已存在，点击访问 <a href='http://{$domain}/' target='_blank'>http://{$domain}/</a></div>";
     } else {
-      $dir1 = substr($_SERVER['DOCUMENT_ROOT'], 0, -19). $dir;
+      $dir1 = WWW_DIR . $dir;
       $dir2 = $dir1 . '/public_html';
       $list[$domain] = $dir2;
       vhost_save($list);
@@ -265,6 +365,7 @@ function vhost_save($items) {
   }
   file_put_contents($file, $data);
 }
+*/
 
 // 删除目录
 function deldir($dir) {
@@ -338,7 +439,7 @@ function ftp_list(){
   $data = simplexml_load_file($file);
   $data = $data->Users;
   $users = array();
-  $data = from($data, 'User');
+  $data = from($data, 'User', array());
   foreach ($data as $key => $value) {
     $value = json_decode(json_encode($value));
     $username = from(from($value, '@attributes'), 'Name');
@@ -366,8 +467,6 @@ function ftp_save($items){
   $content .= '    </Users>\n</FileZillaServer>';
   $content = str_replace('\n', "\n", $content);
   file_put_contents($file, $content);
-  exec('net stop "FileZilla Server"');
-  exec('net start "FileZilla Server"');
 }
 
 // 新增 MySQL
@@ -394,12 +493,14 @@ function op_mysql_add() {
 function op_mysql_del() {
   if (from($_GET, 'act') == 'mysql_del') {
     $user = from($_GET, 'user');
+    $host = from($_GET, 'host');
     $force = from($_GET, 'force');
+    if ($user == "root" && $host == "localhost") return "<div class='alert alert-danger'>系统账号不能删除</div>";
     $con = mysqli_connect(MYSQL_HOSTNAME, MYSQL_USERNAME, MYSQL_PASSWORD);
     if (!$con){die('Could not connect: ' . mysql_error());}
-    $sql = "REVOKE ALL PRIVILEGES ON `{$user}`.* FROM '{$user}'@'localhost';";
+    $sql = "REVOKE ALL PRIVILEGES ON `{$user}`.* FROM '{$user}'@'{$host}';";
     $result = mysqli_query($con, $sql);
-    $sql = "DROP USER '{$user}'@'localhost';";
+    $sql = "DROP USER '{$user}'@'{$host}';";
     $result = mysqli_query($con, $sql);
     if ($force) {
       $sql .= "DROP DATABASE `{$user}`;";
@@ -414,10 +515,10 @@ function op_mysql_del() {
 function mysql_list() {
   $con = mysqli_connect(MYSQL_HOSTNAME, MYSQL_USERNAME, MYSQL_PASSWORD);
   if (!$con){die('Could not connect: ' . mysql_error());}
-  $result = mysqli_query($con, 'SELECT User, Host FROM mysql.user WHERE USER != "" AND USER != "root"');
+  $result = mysqli_query($con, 'SELECT User, Host, Password FROM mysql.user');
   $data = array();
   while($row = $result->fetch_array(MYSQLI_ASSOC)){
-    $data[$row['User']] = $row;
+    $data[] = $row;
   }
   mysqli_close($con);
   return $data;
@@ -434,6 +535,31 @@ function mysql_count($dbname) {
   return round($row['count'] / 1024 / 1024, 2) . " MB";
 }
 
+// 重启服务 
+function ajax() {
+  $act = from($_POST, "act");
+  $obj = from($_POST, "obj");
+  if ($act == "ajax_restart") {
+    if ($obj == "虚拟主机") {
+      $file = ".apache.lock";
+      if (file_exists($file)) {
+          unlink($file);
+        exit(json_encode("ok"));
+      } else {
+        file_put_contents($file, "1");
+        exec('net stop ".apache" & net start ".apache"');
+      }
+    }
+    if ($obj == "MySQL") {
+      exec('net stop ".mysql" & net start ".mysql"');
+      exit(json_encode("ok"));
+    }
+    if ($obj == "FTP") {
+      exec('net stop "FileZilla Server" & net start "FileZilla Server"');
+      exit(json_encode("ok"));
+    }
+  }
+}
 
 
 function from($array, $key, $default = FALSE)
@@ -445,3 +571,35 @@ function from($array, $key, $default = FALSE)
 }
 
 ?>
+<script type="text/javascript">
+  function ajax_restart(obj) {
+    swal({ 
+      title: "提示", 
+      text: "确认重启 " + obj + " 吗？重启大约需要花费 60 秒。", 
+      type: "info", 
+      confirmButtonText: "重启", 
+      cancelButtonText: "取消",
+      showCancelButton: true, 
+      closeOnConfirm: false, 
+      showLoaderOnConfirm: true, 
+    },
+      function(){ 
+        $.ajax({
+          url: "<?php echo $_SERVER['PHP_SELF'] ?>",
+          type: "post",
+          data: {act: "ajax_restart", obj: obj, },
+          dataType: "json",
+          cache: false,
+          success: function (data){
+            if (data == "ok") {
+              swal( obj + " 重启完成", "", "success");
+            }
+          },
+        error : function(xhr, textStatus, errorThrown ) {
+            $.ajax(this);
+        }
+      })
+     }
+  )
+  } 
+</script>
