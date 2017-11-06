@@ -9,14 +9,13 @@ switch (true) {
         header('Content-Type: text/plain; charset=utf-8');
         die('Enter username and password.');
 }
-// define('VHOST_FILE', './../vhost.txt');
 define('WWW_DIR', substr($_SERVER['DOCUMENT_ROOT'], 0, -19));
 define('ANDYPHP_DIR', substr($_SERVER['DOCUMENT_ROOT'], 0, -23));
 define('VHOST_DIR', ANDYPHP_DIR . 'apache/conf/vhost/');
 define('FTP_FILE',  ANDYPHP_DIR . 'ftp/FileZilla Server.xml');
 define('MYSQL_HOSTNAME', 'localhost');
 define('MYSQL_USERNAME', 'root');
-define('MYSQL_PASSWORD', 'CFlIamMvUH');
+define('MYSQL_PASSWORD', '');
 // error_reporting(0);
 ajax();
 ?>
@@ -127,7 +126,7 @@ ajax();
           <th scope="row"><?php echo $i ?></th>
           <td><a href='http://<?php echo $value['domain'] ?>/' target='_blank'><?php echo $value['domain'] ?></a></td>
           <td><?php echo $value['alias'] ?></td>
-          <td><?php echo $value['dir'] ?></td>
+          <td><?php echo WWW_DIR . $value['dir'] . '/public_html' ?></td>
           <td><?php echo date("Y-m-d H:i", filectime(WWW_DIR . $value['dir'])) ?></td>
           <td>
             <a href="javascript:if(confirm('是否要删除所选域名？'))window.location='?act=vhost_del&domain=<?php echo $key ?>'">删除</a>
@@ -273,7 +272,7 @@ function op_vhost_add() {
       !file_exists($dir2) && mkdir($dir2);
       !file_exists($index_file) && file_put_contents($index_file, "<meta charset='utf-8'>虚拟主机创建成功！域名：{$domain}");
     }
-    return "<div class='alert alert-success'>虚拟主机增加成功，重启主机后生效，点击重启 <a href='javascript:ajax_restart(\"虚拟主机\");' >重启</a>。点击访问 <a href='http://{$domain}/' target='_blank'>http://{$domain}/</a></div>";
+    return "<div class='alert alert-success'>虚拟主机增加成功，重启主机后生效，点击 <a href='javascript:ajax_restart(\"虚拟主机\");' >重启虚拟主机</a>。点击访问 <a href='http://{$domain}/' target='_blank'>http://{$domain}/</a></div>";
   }
 }
 
@@ -293,79 +292,9 @@ function op_vhost_del() {
       }
       unlink(VHOST_DIR . $domain);
     }
-    return "<div class='alert alert-success'>域名删除成功，重启主机后生效，点击重启 <a href='javascript:ajax_restart(\"虚拟主机\");' >重启</a></div>";
+    return "<div class='alert alert-success'>域名删除成功，重启主机后生效，点击 <a href='javascript:ajax_restart(\"虚拟主机\");' >重启虚拟主机</a></div>";
   }
 }
-
-/*
-// 增加虚拟主机
-function op_vhost_add() {
-  if (in_array('vhost', from($_POST, 'op', array()))) {
-    $domain = from($_POST, 'vhost_domain');
-    $dir = from($_POST, 'vhost_dir');
-    if (!$domain) return "<div class='alert alert-danger'>请填写域名</div>";
-    if (!$dir) return "<div class='alert alert-danger'>请填写目录</div>";
-    $list = vhost_list();
-    if (isset($list[$domain])) {
-      return "<div class='alert alert-danger'>域名已存在，点击访问 <a href='http://{$domain}/' target='_blank'>http://{$domain}/</a></div>";
-    } else {
-      $dir1 = WWW_DIR . $dir;
-      $dir2 = $dir1 . '/public_html';
-      $list[$domain] = $dir2;
-      vhost_save($list);
-      if (!file_exists($dir2)) {
-        mkdir($dir1);
-        mkdir($dir2);
-        file_put_contents("{$dir2}/index.html", "<meta charset='utf-8'>虚拟主机创建成功！域名：{$domain}");
-      }
-      return "<div class='alert alert-success'>虚拟主机增加成功，点击访问 <a href='http://{$domain}/' target='_blank'>http://{$domain}/</a></div>";
-    }
-  }
-}
-
-// 删除虚拟主机
-function op_vhost_del() {
-  if (from($_GET, 'act') == 'vhost_del') {
-    $domain = from($_GET, 'domain');
-    $force = from($_GET, 'force');
-    $list = vhost_list();
-    if (isset($list[$domain])) {
-      if ($force) {
-        deldir(substr($list[$domain], 0, -11));
-      }
-      unset($list[$domain]);
-    }
-    vhost_save($list);
-    return "<div class='alert alert-success'>域名删除成功</div>";
-  }
-}
-
-// 获取虚拟主机
-function vhost_list() {
-  $file = VHOST_FILE;
-  $content = file_get_contents($file);
-  $data = explode("\n", $content);
-  $items = array();
-  foreach ($data as $key => $value) {
-    if ($value) {
-      list($domain, $dir) = explode(" ", $value);
-      $items[$domain] = $dir;
-    }
-  }
-  return $items;
-}
-
-// 保存虚拟主机
-function vhost_save($items) {
-  $file = VHOST_FILE;
-  $data = '';
-  foreach ($items as $key => $value) {
-    if ($key)
-      $data .= "{$key} {$value}\n";
-  }
-  file_put_contents($file, $data);
-}
-*/
 
 // 删除目录
 function deldir($dir) {
@@ -414,7 +343,7 @@ function op_ftp_add() {
     );
     ftp_save($list);
 
-    return "<div class='alert alert-success'>FTP 增加成功，重启 FTP 后生效，点击重启 <a href='javascript:ajax_restart(\"FTP\");' >重启</a></div>";
+    return "<div class='alert alert-success'>FTP 增加成功，重启 FTP 后生效，点击 <a href='javascript:ajax_restart(\"FTP\");' >重启 FTP</a></div>";
   }
 }
 
@@ -429,7 +358,7 @@ function op_ftp_del() {
     }
     unset($list[$id]);
     ftp_save($list);
-    return "<div class='alert alert-success'>FTP 删除成功，重启 FTP 后生效，点击重启 <a href='javascript:ajax_restart(\"FTP\");' >重启</a></div>";
+    return "<div class='alert alert-success'>FTP 删除成功，重启 FTP 后生效，点击 <a href='javascript:ajax_restart(\"FTP\");' >重启 FTP</a></div>";
   }
 }
 
