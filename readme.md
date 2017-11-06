@@ -76,10 +76,6 @@ DocumentRoot ../www/default/public_html
 </Directory>
 
 
-2.6.1 网速限制模块 mod_bw：到 https://www.apachelounge.com/download/ 下载 mod_bw-0.92-win64-VC15.zip 解压放到 apache\modules 目录
-2.6.2 在 #LoadModule xml2enc_module modules/mod_xml2enc.so 后面增加一行 LoadModule bw_module modules/mod_bw.so
-
-
 PHP：
 1. 到 http://windows.php.net/download/ 下载 VC11 x64 Thread Safe 版，解压放到目录里，命名为 php
 2. php.ini-development 复制到 php.ini
