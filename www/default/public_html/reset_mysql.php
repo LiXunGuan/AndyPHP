@@ -1,6 +1,16 @@
 <meta charset='utf-8'>
-
 <?php
+$username = 'admin';
+$password = 'admin';
+switch (true) {
+    case !isset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']):
+    case $_SERVER['PHP_AUTH_USER'] !== $username:
+    case $_SERVER['PHP_AUTH_PW']   !== $password:
+        header('WWW-Authenticate: Basic realm="Enter username and password."');
+        header('Content-Type: text/plain; charset=utf-8');
+        die('Enter username and password.');
+}
+
 define('MYSQL_HOSTNAME', 'localhost');
 define('MYSQL_USERNAME', 'root');
 define('MYSQL_PASSWORD', '');
