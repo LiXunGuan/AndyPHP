@@ -87,7 +87,7 @@ DocumentRoot ../www/default
 </Directory>
 
 2.7.1 网速限制模块 mod_bw：到 https://www.apachelounge.com/download/ 下载 mod_bw-0.92-win64-VC15.zip 解压放到 apache\modules 目录
-2.7.2 在 #LoadModule xml2enc_module modules/mod_xml2enc.so 后面增加一行 LoadModule xml2enc_module modules/mod_bw.so
+2.7.2 在 #LoadModule xml2enc_module modules/mod_xml2enc.so 后面增加一行 LoadModule bw_module modules/mod_bw.so
 
 
 PHP：
