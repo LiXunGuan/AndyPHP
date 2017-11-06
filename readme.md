@@ -49,46 +49,34 @@ Apache：
 2.2.6 修改 DocumentRoot "c:/Apache24/htdocs" 前面加入 # 号
 2.2.7 修改 #LoadModule deflate_module modules/mod_deflate.so 去除前面 # 号
 2.2.7 修改 #LoadModule filter_module modules/mod_filter.so 去除前面 # 号
+2.4.8 修改 #LoadModule rewrite_module modules/mod_rewrite.so 去除前面 # 号
 2.3. 删除
 <Directory />
     AllowOverride none
     Require all denied
 </Directory>
-2.4. 找到 LoadModule rewrite_module modules/mod_rewrite.so 移除 # 号
-2.5.
+2.4.
 最后在底部加入
 ServerName localhost:80
-DocumentRoot "../www/default/public_html"
-<Directory />
-    Options FollowSymLinks
-    DirectoryIndex index.php index.html
-    AllowOverride All
-    Order deny,allow
-    Allow from all
-</Directory>
 AddType application/x-httpd-php .php
 LoadModule php5_module ../php/php5apache2_4.dll
 PHPIniDir ../php
-RewriteEngine on
-RewriteMap lowercase int:tolower
-RewriteMap vhost txt:../www/default/vhost.txt
-RewriteCond ${lowercase:%{SERVER_NAME}} ^(.+)$
-RewriteCond ${vhost:%1} ^(.*)$
-RewriteRule ^/(.*)$ %1/$1
+Include conf/vhost/*.conf
 
-2.6 在 apache\conf\ 新建目录 vhost ，新建文件 00000.default.conf 写入以下内容
+2.5 在 apache\conf\ 新建目录 vhost ，新建文件 00000.default.conf 写入以下内容
 <VirtualHost *:80>
 DocumentRoot ../www/default/public_html
 </VirtualHost>
-<Directory ../www/default/public_html>
+<Directory ../www/default>
     Options FollowSymLinks
-    AllowOverride None
+    AllowOverride All
     Order allow,deny
     Allow from all
 </Directory>
 
-2.7.1 网速限制模块 mod_bw：到 https://www.apachelounge.com/download/ 下载 mod_bw-0.92-win64-VC15.zip 解压放到 apache\modules 目录
-2.7.2 在 #LoadModule xml2enc_module modules/mod_xml2enc.so 后面增加一行 LoadModule bw_module modules/mod_bw.so
+
+2.6.1 网速限制模块 mod_bw：到 https://www.apachelounge.com/download/ 下载 mod_bw-0.92-win64-VC15.zip 解压放到 apache\modules 目录
+2.6.2 在 #LoadModule xml2enc_module modules/mod_xml2enc.so 后面增加一行 LoadModule bw_module modules/mod_bw.so
 
 
 PHP：
