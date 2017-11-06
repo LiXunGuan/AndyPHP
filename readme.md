@@ -76,7 +76,7 @@ RewriteCond ${lowercase:%{SERVER_NAME}} ^(.+)$
 RewriteCond ${vhost:%1} ^(.*)$
 RewriteRule ^/(.*)$ %1/$1
 
-2.6 在 apache\conf\ 新建目录 vhost ，新建文件 default.conf 写入以下内容
+2.6 在 apache\conf\ 新建目录 vhost ，新建文件 00000.default.conf 写入以下内容
 <VirtualHost *:80>
 DocumentRoot ../www/default
 </VirtualHost>
