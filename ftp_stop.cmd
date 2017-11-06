@@ -10,8 +10,8 @@ fltmc >nul 2>&1 || (
 	exit
 )
 
-"FileZilla Server\FileZilla Server" /stop
-"FileZilla Server\FileZilla Server" /uninstall
+"ftp\FileZilla Server" /stop
+"ftp\FileZilla Server" /uninstall
 
 echo [Success] Uninstall completed.
 pause

@@ -10,7 +10,7 @@ fltmc >nul 2>&1 || (
 	exit
 )
 
-"FileZilla Server\FileZilla Server" /install auto
+"ftp\FileZilla Server" /install auto
 
 echo [Success] Installation completed.
 pause

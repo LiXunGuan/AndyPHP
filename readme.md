@@ -39,7 +39,7 @@ https://github.com/mingfunwong/AndyPHP/archive/master.zip
 ## 一键安装包制作方法备忘录
 ```
 Apache：
-1. 到 https://www.apachelounge.com/download/ 下载 Apache 2.x.xx Win64 版，解压放到目录里
+1. 到 https://www.apachelounge.com/download/ 下载 Apache 2.x.xx Win64 版，解压放到目录里，命名为 apache
 2. 编辑 Apache24\conf\httpd.conf
 2.1.1 ServerRoot "c:/Apache24" 前面加入 # 号
 2.1.2 ErrorLog "logs/error.log" 前面加入 # 号
@@ -56,7 +56,7 @@ Apache：
 2.5.
 最后在底部加入
 ServerName localhost:80
-DocumentRoot "../Sites/default/public_html"
+DocumentRoot "../www/default/public_html"
 <Directory />
     Options FollowSymLinks
     DirectoryIndex index.php index.html
@@ -65,20 +65,20 @@ DocumentRoot "../Sites/default/public_html"
     Allow from all
 </Directory>
 AddType application/x-httpd-php .php
-LoadModule php5_module ../php-5.6.32-Win32-VC11-x64/php5apache2_4.dll
-PHPIniDir ../php-5.6.32-Win32-VC11-x64
+LoadModule php5_module ../php/php5apache2_4.dll
+PHPIniDir ../php
 RewriteEngine on
 RewriteMap lowercase int:tolower
-RewriteMap vhost txt:../Sites/default/vhost.txt
+RewriteMap vhost txt:../www/default/vhost.txt
 RewriteCond ${lowercase:%{SERVER_NAME}} ^(.+)$
 RewriteCond ${vhost:%1} ^(.*)$
 RewriteRule ^/(.*)$ %1/$1
 
 PHP：
-1. 到 http://windows.php.net/download/ 下载 VC11 x64 Thread Safe 版，解压放到目录里
+1. 到 http://windows.php.net/download/ 下载 VC11 x64 Thread Safe 版，解压放到目录里，命名为 php
 2. php.ini-development 复制到 php.ini
 3. 修改文件 php.ini
-# extension_dir = "ext" 改为 extension_dir = "../php-5.6.32-Win32-VC11-x64/ext"
+# extension_dir = "ext" 改为 extension_dir = "../php/ext"
 ;date.timezone = 改为 date.timezone = Asia/Shanghai
 下面直接覆盖
 extension=php_bz2.dll
@@ -109,17 +109,17 @@ extension=php_pdo_sqlite.dll
 4. libssh2.dll 复制到 Apache24\bin 目录。
 
 MariaDB：
-1. 到 https://downloads.mariadb.org/ 下载 MariaDB 10.x Series 版，解压放到目录里
+1. 到 https://downloads.mariadb.org/ 下载 MariaDB 10.x Series 版，解压放到目录里，命名为 mysql
 2. 复制 my-medium.ini 为 my.ini
 
 FileZilla Server：
-1. 到 https://filezilla-project.org/download.php?type=server 下载安装到目录。
+1. 到 https://filezilla-project.org/download.php?type=server 下载安装到目录，命名为 ftp
 
 phpMyAdmin：
-1. 到 https://www.phpmyadmin.net/downloads/ 下载 phpMyAdmin-4.x.x-all-languages.zip 版，解压放到 Sites\default 目录里
+1. 到 https://www.phpmyadmin.net/downloads/ 下载 phpMyAdmin-4.x.x-all-languages.zip 版，解压放到 www\default 目录里
 2. 复制 phpMyAdmin-4.7.5-all-languages\config.sample.inc.php 为 config.inc.php
 3. 编辑 config.inc.php 的 $cfg['Servers'][$i]['AllowNoPassword'] = false; 为 $cfg['Servers'][$i]['AllowNoPassword'] = true;
 
 Adminer：
-1. 到 https://www.adminer.org/#download 下载 Adminer 4.x.x 版，放到 Sites\default 目录里
+1. 到 https://www.adminer.org/#download 下载 Adminer 4.x.x 版，放到 www\default 目录里
 ```

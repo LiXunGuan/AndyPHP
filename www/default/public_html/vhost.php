@@ -10,7 +10,7 @@ switch (true) {
         die('Enter username and password.');
 }
 define('VHOST_FILE', './../vhost.txt');
-define('FTP_FILE', './../../../FileZilla Server/FileZilla Server.xml');
+define('FTP_FILE', './../../../ftp/FileZilla Server.xml');
 \define('MYSQL_HOSTNAME', 'localhost');
 define('MYSQL_USERNAME', 'root');
 define('MYSQL_PASSWORD', '');
@@ -359,12 +359,12 @@ function ftp_list(){
 function ftp_save($items){
   $file = FTP_FILE;
   $content = '';
-  $content .= '<FileZillaServer>|    <Settings>|        <Item name="Admin port" type="numeric">14147</Item>|    </Settings>|    <Groups />|    <Users>|';
+  $content .= '<FileZillaServer>\n    <Settings>\n        <Item name="Admin port" type="numeric">14147</Item>\n    </Settings>\n    <Groups />\n    <Users>\n';
   foreach ($items as $key => $value) {
-    $content .= '        <User Name="'.$value['username'].'">|            <Option Name="Pass">'.$value['password'].'</Option>|            <Option Name="Salt">'.$value['salt'].'</Option>|            <Option Name="Group"></Option>|            <Option Name="Bypass server userlimit">0</Option>|            <Option Name="User Limit">0</Option>|            <Option Name="IP Limit">0</Option>|            <Option Name="Enabled">1</Option>|            <Option Name="Comments"></Option>|            <Option Name="ForceSsl">0</Option>|            <IpFilter>|                <Disallowed />|                <Allowed />|            </IpFilter>|            <Permissions>|                <Permission Dir="'.$value['dir'].'">|                    <Option Name="FileRead">1</Option>|                    <Option Name="FileWrite">1</Option>|                    <Option Name="FileDelete">1</Option>|                    <Option Name="FileAppend">1</Option>|                    <Option Name="DirCreate">1</Option>|                    <Option Name="DirDelete">1</Option>|                    <Option Name="DirList">1</Option>|                    <Option Name="DirSubdirs">1</Option>|                    <Option Name="IsHome">1</Option>|                    <Option Name="AutoCreate">0</Option>|                </Permission>|            </Permissions>|            <SpeedLimits DlType="0" DlLimit="10" ServerDlLimitBypass="0" UlType="0" UlLimit="10" ServerUlLimitBypass="0">|                <Download />|                <Upload />|            </SpeedLimits>|        </User>|';
+    $content .= '        <User Name="'.$value['username'].'">\n            <Option Name="Pass">'.$value['password'].'</Option>\n            <Option Name="Salt">'.$value['salt'].'</Option>\n            <Option Name="Group"></Option>\n            <Option Name="Bypass server userlimit">0</Option>\n            <Option Name="User Limit">0</Option>\n            <Option Name="IP Limit">0</Option>\n            <Option Name="Enabled">1</Option>\n            <Option Name="Comments"></Option>\n            <Option Name="ForceSsl">0</Option>\n            <IpFilter>\n                <Disallowed />\n                <Allowed />\n            </IpFilter>\n            <Permissions>\n                <Permission Dir="'.$value['dir'].'">\n                    <Option Name="FileRead">1</Option>\n                    <Option Name="FileWrite">1</Option>\n                    <Option Name="FileDelete">1</Option>\n                    <Option Name="FileAppend">1</Option>\n                    <Option Name="DirCreate">1</Option>\n                    <Option Name="DirDelete">1</Option>\n                    <Option Name="DirList">1</Option>\n                    <Option Name="DirSubdirs">1</Option>\n                    <Option Name="IsHome">1</Option>\n                    <Option Name="AutoCreate">0</Option>\n                </Permission>\n            </Permissions>\n            <SpeedLimits DlType="0" DlLimit="10" ServerDlLimitBypass="0" UlType="0" UlLimit="10" ServerUlLimitBypass="0">\n                <Download />\n                <Upload />\n            </SpeedLimits>\n        </User>\n';
   }
-  $content .= '    </Users>|</FileZillaServer>';
-  $content = str_replace("|", "\n", $content);
+  $content .= '    </Users>\n</FileZillaServer>';
+  $content = str_replace('\n', "\n", $content);
   file_put_contents($file, $content);
   exec('net stop "FileZilla Server"');
   exec('net start "FileZilla Server"');

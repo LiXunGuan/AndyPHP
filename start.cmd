@@ -20,7 +20,8 @@ pause
 goto :eof
 
 :start_apache
-Apache24\bin\httpd -k install -n .apache
+apache\bin\httpd -t
+apache\bin\httpd -k install -n .apache
 net start .apache
 goto :eof
 
@@ -30,7 +31,7 @@ goto :eof
 goto :eof
 
 :start_mysql
-mariadb-10.2.9-winx64\bin\mysqld --install .mysql
+mysql\bin\mysqld --install .mysql
 (sc query .mysql | find ".mysql">nul && net start .mysql)
 goto :eof
 
