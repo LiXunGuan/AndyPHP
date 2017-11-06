@@ -293,7 +293,7 @@ function op_vhost_del() {
       }
       unlink(VHOST_DIR . $domain);
     }
-    return "<div class='alert alert-success'>域名删除成功</div>";
+    return "<div class='alert alert-success'>域名删除成功，重启主机后生效，点击重启 <a href='javascript:ajax_restart(\"虚拟主机\");' >重启</a></div>";
   }
 }
 
@@ -414,7 +414,7 @@ function op_ftp_add() {
     );
     ftp_save($list);
 
-    return "<div class='alert alert-success'>FTP 增加成功</div>";
+    return "<div class='alert alert-success'>FTP 增加成功，重启 FTP 后生效，点击重启 <a href='javascript:ajax_restart(\"FTP\");' >重启</a></div>";
   }
 }
 
@@ -429,7 +429,7 @@ function op_ftp_del() {
     }
     unset($list[$id]);
     ftp_save($list);
-    return "<div class='alert alert-success'>FTP 删除成功</div>";
+    return "<div class='alert alert-success'>FTP 删除成功，重启 FTP 后生效，点击重启 <a href='javascript:ajax_restart(\"FTP\");' >重启</a></div>";
   }
 }
 
