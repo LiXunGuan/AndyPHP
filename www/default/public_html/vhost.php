@@ -262,7 +262,7 @@ function op_vhost_add() {
     $dir2 = $dir1 . '/public_html';
     $file = "{$domain}.conf";
     $fullpath = VHOST_DIR . $file;
-    $content = '<VirtualHost *:80>\nDocumentRoot ../www/'.$dir.'/public_html\nServerName '.$domain.'\nServerAlias '.$alias.'\nphp_admin_value open_basedir '.WWW_DIR.$dir.';C:/Windows/TEMP\n<IfModule mod_bw.c>\nBandWidthModule On\nForceBandWidthModule On\nBandWidth all 10240000\nMaxConnection all 100\n</IfModule>\n<IfModule mod_deflate.c>\nDeflateCompressionLevel 7\nAddOutputFilterByType DEFLATE text/html text/plain text/xml application/x-httpd-php\nAddOutputFilter DEFLATE css js html htm gif jpg png bmp php\n</IfModule>\n</VirtualHost>\n<Directory ../www/'.$dir.'>\n    Options FollowSymLinks\n  DirectoryIndex index.php index.html\n    AllowOverride All\n    Order allow,deny\n    Allow from all\n</Directory>\n';
+    $content = '<VirtualHost *:80>\nDocumentRoot ../www/'.$dir.'/public_html\nServerName '.$domain.'\nServerAlias '.$alias.'\nphp_admin_value open_basedir '.WWW_DIR.$dir.';C:/Windows/TEMP\n<IfModule mod_deflate.c>\nDeflateCompressionLevel 7\nAddOutputFilterByType DEFLATE text/html text/plain text/xml application/x-httpd-php\nAddOutputFilter DEFLATE css js html htm gif jpg png bmp php\n</IfModule>\n</VirtualHost>\n<Directory ../www/'.$dir.'>\n    Options FollowSymLinks\n  DirectoryIndex index.php index.html\n    AllowOverride All\n    Order allow,deny\n    Allow from all\n</Directory>\n';
     $content = str_replace('\n', "\n", $content);
     $old_content = (file_exists($fullpath)) ? file_get_contents($fullpath) : "";
     if ($old_content != $content) {
