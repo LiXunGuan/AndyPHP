@@ -47,6 +47,7 @@ Apache：
 2.1.4 修改 LogLevel warn 到 LogLevel crit
 2.1.5 修改 LoadModule log_config_module modules/mod_log_config.so 前面加入 # 号
 2.2.6 修改 DocumentRoot "c:/Apache24/htdocs" 前面加入 # 号
+2.2.7 修改 #LoadModule deflate_module modules/mod_deflate.so 去除前面 # 号
 2.3. 删除
 <Directory />
     AllowOverride none
@@ -73,6 +74,21 @@ RewriteMap vhost txt:../www/default/vhost.txt
 RewriteCond ${lowercase:%{SERVER_NAME}} ^(.+)$
 RewriteCond ${vhost:%1} ^(.*)$
 RewriteRule ^/(.*)$ %1/$1
+
+2.6 在 apache\conf\ 新建目录 vhost ，新建文件 default.conf 写入以下内容
+<VirtualHost *:80>
+DocumentRoot ../www/default
+</VirtualHost>
+<Directory ../www/default>
+    Options FollowSymLinks
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+</Directory>
+
+2.7.1 网速限制模块 mod_bw：到 https://www.apachelounge.com/download/ 下载 mod_bw-0.92-win64-VC15.zip 解压放到 apache\modules 目录
+2.7.2 在 #LoadModule xml2enc_module modules/mod_xml2enc.so 后面增加一行 LoadModule xml2enc_module modules/mod_bw.so
+
 
 PHP：
 1. 到 http://windows.php.net/download/ 下载 VC11 x64 Thread Safe 版，解压放到目录里，命名为 php
