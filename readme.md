@@ -66,9 +66,9 @@ Include conf/vhost/*.conf
 
 2.5 在 apache\conf\ 新建目录 vhost ，新建文件 00000.default.conf 写入以下内容
 <VirtualHost *:80>
-DocumentRoot ../www/default/public_html
+DocumentRoot ../web/default/public_html
 </VirtualHost>
-<Directory ../www/default>
+<Directory ../web/default>
     Options FollowSymLinks
     DirectoryIndex index.php index.html
     AllowOverride All
@@ -119,10 +119,10 @@ FileZilla Server：
 1. 到 https://filezilla-project.org/download.php?type=server 下载安装到目录，命名为 ftp
 
 phpMyAdmin：
-1. 到 https://www.phpmyadmin.net/downloads/ 下载 phpMyAdmin-4.x.x-all-languages.zip 版，解压放到 www\default 目录里
+1. 到 https://www.phpmyadmin.net/downloads/ 下载 phpMyAdmin-4.x.x-all-languages.zip 版，解压放到 web\default 目录里
 2. 复制 phpMyAdmin-4.7.5-all-languages\config.sample.inc.php 为 config.inc.php
 3. 编辑 config.inc.php 的 $cfg['Servers'][$i]['AllowNoPassword'] = false; 为 $cfg['Servers'][$i]['AllowNoPassword'] = true;
 
 Adminer：
-1. 到 https://www.adminer.org/#download 下载 Adminer 4.x.x 版，放到 www\default 目录里
+1. 到 https://www.adminer.org/#download 下载 Adminer 4.x.x 版，放到 web\default 目录里
 ```
