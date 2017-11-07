@@ -43,11 +43,12 @@ Apache：
 2. 编辑 Apache24\conf\httpd.conf
 2.1.1 ServerRoot "c:/Apache24" 前面加入 # 号
 2.1.2 ErrorLog "logs/error.log" 前面加入 # 号
-2.1.3 CustomLog "logs/access.log" common 前面加入 # 号
+2.1.3 CustomLog "logs/access.log" common 前面加入 # 号，后面加入
+    LogFormat "%V %U %b" common
+    CustomLog "|bin/rotatelogs.exe logs/access_%Y%m%d.log 86400 480" common
 2.1.4 修改 LogLevel warn 到 LogLevel crit
-2.1.5 修改 LoadModule log_config_module modules/mod_log_config.so 前面加入 # 号
-2.2.6 修改 DocumentRoot "c:/Apache24/htdocs" 前面加入 # 号
-2.2.7 修改 #LoadModule deflate_module modules/mod_deflate.so 去除前面 # 号
+2.2.5 修改 DocumentRoot "c:/Apache24/htdocs" 前面加入 # 号
+2.2.6 修改 #LoadModule deflate_module modules/mod_deflate.so 去除前面 # 号
 2.2.7 修改 #LoadModule filter_module modules/mod_filter.so 去除前面 # 号
 2.4.8 修改 #LoadModule rewrite_module modules/mod_rewrite.so 去除前面 # 号
 2.3. 删除
