@@ -244,7 +244,7 @@ function vhost_list() {
       $items[$file] = array(
         'domain' => ($domain) ? $domain : "localhost",
         'alias' => $alias,
-        'dir' => $dir,
+        'dir' => trim($dir),
       );
     }
   }
