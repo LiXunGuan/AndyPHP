@@ -125,7 +125,7 @@ ajax();
         <tr>
           <th scope="row"><?php echo $i ?></th>
           <td><a href='http://<?php echo $value['domain'] ?>/' target='_blank'><?php echo $value['domain'] ?></a></td>
-          <td><?php foreach (explode(" ", $value['alias']) as $key => $val) {
+          <td><?php foreach (explode(" ", $value['alias']) as $val) {
             echo "<a href='http://{$val}' target='_blank'>{$val}</a> ";
           } ?></td>
           <td><?php echo WWW_DIR . $value['dir'] . '/public_html' ?></td>
