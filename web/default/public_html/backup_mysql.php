@@ -1,50 +1,25 @@
 <?php
 // error_reporting(0);
 ini_set('max_execution_time', '0');
+ini_set('memory_limit','10240M');
 $host = 'localhost';
 $user = 'root';
 $passwd = '';
+
 $con = mysqli_connect($host, $user, $passwd);
 if (!$con){die('Could not connect: ' . mysqli_connect_error());}
 $result = mysqli_query($con, 'show databases');
 $data = array();
-$path = "./mysql_backup/" . date("Y-m-d_H-i-s") . "/";
+$path = "./backup_mysql/" . date("Y-m-d_H-i-s") . "/";
 mk_dir($path);
 while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
     $dbname = $row['Database'];
-    mysqli_select_db($con, $dbname);
-    $mysql = "set names utf8;\n";
-    mysqli_query($con, $mysql);
-    $tables = mysqli_query($con, 'show tables');
-    while ($t = $tables->fetch_array()) {
-        $table = $t[0];
-        $mysql .= dump_table($con, $table);
-    }
-    $filename = $path . $dbname . ".sql";
-    file_put_contents($filename, $mysql);
+
+    db_dump($host,$user,$passwd,$dbname,$path.$dbname.".sql");
+
 }
-echo "Backedup  data successfully.";
-function dump_table($con, $table)
-{
-    $q2 = mysqli_query($con, "show create table {$table}");
-    $sql = $q2->fetch_array();
-    $mysql = "DROP TABLE IF EXISTS {$table};\n";
-    $mysql .= $sql['Create Table'] . ";\n";
-    $q3 = mysqli_query($con, "select * from {$table}");
-    while ($data = $q3->fetch_array(MYSQLI_ASSOC)) {
-        $keys = array_keys($data);
-        $keys = array_map('addslashes', $keys);
-        $keys = join('`,`', $keys);
-        $keys = "`" . $keys . "`";
-        $vals = array_values($data);
-        $vals = array_map('addslashes', $vals);
-        $vals = join("','", $vals);
-        $vals = "'" . $vals . "'";
-        $mysql .= "insert into `{$table}`({$keys}) values({$vals});\n";
-    }
-    $mysql .= "\n";
-    return $mysql;
-}
+echo "Backedup data successfully.";
+
 function mk_dir($dir, $mode = 0755)
 {
     if (is_dir($dir) || @mkdir($dir, $mode)) {
@@ -55,3 +30,128 @@ function mk_dir($dir, $mode = 0755)
     }
     return @mkdir($dir, $mode);
 }
+
+function db_dump($host,$user,$pwd,$db,$file) {
+    $mysqlconlink = @mysql_connect($host,$user,$pwd , true);
+    if (!$mysqlconlink)
+        echo sprintf('No MySQL connection: %s',mysql_error())."<br/>";
+    mysql_set_charset( 'utf8', $mysqlconlink );
+    $mysqldblink = mysql_select_db($db,$mysqlconlink);
+    if (!$mysqldblink)
+        echo sprintf('No MySQL connection to database: %s',mysql_error())."<br/>";
+    $tabelstobackup=array();
+    $result=mysql_query("SHOW TABLES FROM `$db`");
+    if (!$result)
+        echo sprintf('Database error %1$s for query %2$s', mysql_error(), "SHOW TABLE STATUS FROM `$db`;")."<br/>";
+    while ($data = mysql_fetch_row($result)) {
+            $tabelstobackup[]=$data[0];
+    }
+    $result=mysql_query("SHOW TABLE STATUS FROM `$db`");
+    if (!$result)
+        echo sprintf('Database error %1$s for query %2$s', mysql_error(), "SHOW TABLE STATUS FROM `$db`;")."<br/>";
+    while ($data = mysql_fetch_assoc($result)) {
+        $status[$data['Name']]=$data;
+    }
+    if ($file = fopen($file, 'wb')) {
+        fwrite($file, "-- ---------------------------------------------------------\n");
+        fwrite($file, "-- Database Name: $db\n");
+        fwrite($file, "-- ---------------------------------------------------------\n\n");
+        fwrite($file, "/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;\n");
+        fwrite($file, "/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;\n");
+        fwrite($file, "/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;\n");
+        fwrite($file, "/*!40101 SET NAMES '".mysql_client_encoding()."' */;\n");
+        fwrite($file, "/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;\n");
+        fwrite($file, "/*!40103 SET TIME_ZONE='".mysql_result(mysql_query("SELECT @@time_zone"),0)."' */;\n");
+        fwrite($file, "/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;\n");
+        fwrite($file, "/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;\n");
+        fwrite($file, "/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;\n");
+        fwrite($file, "/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;\n\n");
+        foreach($tabelstobackup as $table) {
+            need_free_memory(($status[$table]['Data_length']+$status[$table]['Index_length'])*3);
+            _db_dump_table($table,$status[$table],$file);
+        }
+        fwrite($file, "\n");
+        fwrite($file, "/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;\n");
+        fwrite($file, "/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;\n");
+        fwrite($file, "/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;\n");
+        fwrite($file, "/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;\n");
+        fwrite($file, "/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;\n");
+        fwrite($file, "/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;\n");
+        fwrite($file, "/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;\n");
+        fwrite($file, "/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;\n");
+        fclose($file);
+        echo date("[Y-md H:i:s] ") . $db . ' Database dump done!'."<br/>";
+    } else {
+        echo date("[Y-md H:i:s] ") . $db . ' Can not create database dump!'."<br/>";
+    }
+
+}
+function _db_dump_table($table,$status,$file) {
+    fwrite($file, "\n");
+    fwrite($file, "--\n");
+    fwrite($file, "-- Table structure for table $table\n");
+    fwrite($file, "--\n\n");
+    fwrite($file, "DROP TABLE IF EXISTS `" . $table .  "`;\n");
+    fwrite($file, "/*!40101 SET @saved_cs_client     = @@character_set_client */;\n");
+    fwrite($file, "/*!40101 SET character_set_client = '".mysql_client_encoding()."' */;\n");
+    $result=mysql_query("SHOW CREATE TABLE `".$table."`");
+    if (!$result) {
+        echo sprintf('Database error %1$s for query %2$s', mysql_error(), "SHOW CREATE TABLE `".$table."`")."<br/>";
+        return false;
+    }
+    $tablestruc=mysql_fetch_assoc($result);
+    fwrite($file, $tablestruc['Create Table'].";\n");
+    fwrite($file, "/*!40101 SET character_set_client = @saved_cs_client */;\n");
+    $result=mysql_query("SELECT * FROM `".$table."`");
+    if (!$result) {
+        echo sprintf('Database error %1$s for query %2$s', mysql_error(), "SELECT * FROM `".$table."`")."<br/>";
+        return false;
+    }
+    fwrite($file, "--\n");
+    fwrite($file, "-- Dumping data for table $table\n");
+    fwrite($file, "--\n\n");
+    if ($status['Engine']=='MyISAM')
+        fwrite($file, "/*!40000 ALTER TABLE `".$table."` DISABLE KEYS */;\n");
+    while ($data = mysql_fetch_assoc($result)) {
+        $keys = array();
+        $values = array();
+        foreach($data as $key => $value) {
+            if($value === NULL)
+                $value = "NULL";
+            elseif($value === "" or $value === false)
+                $value = "''";
+            elseif(!is_numeric($value))
+                $value = "'".mysql_real_escape_string($value)."'";
+            $values[] = $value;
+        }
+        fwrite($file, "INSERT INTO `".$table."` VALUES ( ".implode(", ",$values)." );\n");
+    }
+    if ($status['Engine']=='MyISAM')
+        fwrite($file, "/*!40000 ALTER TABLE ".$table." ENABLE KEYS */;\n");
+}
+function need_free_memory($memneed) {
+    if (!function_exists('memory_get_usage'))
+        return;
+    $needmemory=@memory_get_usage(true)+inbytes($memneed);
+    if ($needmemory>inbytes(ini_get('memory_limit'))) {
+        $newmemory=round($needmemory/1024/1024)+1 .'M';
+        if ($needmemory>=1073741824)
+            $newmemory=round($needmemory/1024/1024/1024) .'G';
+        if ($oldmem=@ini_set('memory_limit', $newmemory))
+            echo sprintf(__('Memory increased from %1$s to %2$s','backwpup'),$oldmem,@ini_get('memory_limit'))."<br/>";
+        else
+            echo sprintf(__('Can not increase memory limit is %1$s','backwpup'),@ini_get('memory_limit'))."<br/>";
+    }
+}
+function inbytes($value) {
+    $multi=strtoupper(substr(trim($value),-1));
+    $bytes=abs(intval(trim($value)));
+    if ($multi=='G')
+        $bytes=$bytes*1024*1024*1024;
+    if ($multi=='M')
+        $bytes=$bytes*1024*1024;
+    if ($multi=='K')
+        $bytes=$bytes*1024;
+    return $bytes;
+}
+?>
