@@ -5,18 +5,15 @@ ini_set('memory_limit','10240M');
 $host = 'localhost';
 $user = 'root';
 $passwd = '';
-
-$con = mysqli_connect($host, $user, $passwd);
-if (!$con){die('Could not connect: ' . mysqli_connect_error());}
-$result = mysqli_query($con, 'show databases');
+$con = @mysql_connect($host, $user, $passwd);
+if (!$con){die('Could not connect: ' . mysql_connect_error());}
+$result = mysql_query('show databases');
 $data = array();
 $path = "./backup_mysql/" . date("Y-m-d_H-i-s") . "/";
 mk_dir($path);
-while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
+while ($row = mysql_fetch_assoc($result)) {
     $dbname = $row['Database'];
-
     db_dump($host,$user,$passwd,$dbname,$path.$dbname.".sql");
-
 }
 echo "Backedup data successfully.";
 
@@ -67,7 +64,6 @@ function db_dump($host,$user,$pwd,$db,$file) {
         fwrite($file, "/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;\n");
         fwrite($file, "/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;\n\n");
         foreach($tabelstobackup as $table) {
-            need_free_memory(($status[$table]['Data_length']+$status[$table]['Index_length'])*3);
             _db_dump_table($table,$status[$table],$file);
         }
         fwrite($file, "\n");
@@ -129,29 +125,4 @@ function _db_dump_table($table,$status,$file) {
     if ($status['Engine']=='MyISAM')
         fwrite($file, "/*!40000 ALTER TABLE ".$table." ENABLE KEYS */;\n");
 }
-function need_free_memory($memneed) {
-    if (!function_exists('memory_get_usage'))
-        return;
-    $needmemory=@memory_get_usage(true)+inbytes($memneed);
-    if ($needmemory>inbytes(ini_get('memory_limit'))) {
-        $newmemory=round($needmemory/1024/1024)+1 .'M';
-        if ($needmemory>=1073741824)
-            $newmemory=round($needmemory/1024/1024/1024) .'G';
-        if ($oldmem=@ini_set('memory_limit', $newmemory))
-            echo sprintf(__('Memory increased from %1$s to %2$s','backwpup'),$oldmem,@ini_get('memory_limit'))."<br/>";
-        else
-            echo sprintf(__('Can not increase memory limit is %1$s','backwpup'),@ini_get('memory_limit'))."<br/>";
-    }
-}
-function inbytes($value) {
-    $multi=strtoupper(substr(trim($value),-1));
-    $bytes=abs(intval(trim($value)));
-    if ($multi=='G')
-        $bytes=$bytes*1024*1024*1024;
-    if ($multi=='M')
-        $bytes=$bytes*1024*1024;
-    if ($multi=='K')
-        $bytes=$bytes*1024;
-    return $bytes;
-}
-?>
+
