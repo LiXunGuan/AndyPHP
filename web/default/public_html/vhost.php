@@ -408,7 +408,7 @@ function op_mysql_add() {
     if (!$username) return "<div class='alert alert-danger'>请填写账号</div>";
     if (!$password) return "<div class='alert alert-danger'>请填写密码</div>";
     $con = mysqli_connect(MYSQL_HOSTNAME, MYSQL_USERNAME, MYSQL_PASSWORD);
-    if (!$con){die('Could not connect: ' . mysql_error());}
+    if (!$con){die('Could not connect: ' . mysqli_connect_error());}
     $sql = "CREATE USER '{$username}'@'localhost' IDENTIFIED BY '{$password}';";
     $result = mysqli_query($con, $sql);
     $sql = "CREATE DATABASE IF NOT EXISTS `{$username}`;";
@@ -428,7 +428,7 @@ function op_mysql_del() {
     $force = from($_GET, 'force');
     if ($user == "root" && $host == "localhost") return "<div class='alert alert-danger'>系统账号不能删除</div>";
     $con = mysqli_connect(MYSQL_HOSTNAME, MYSQL_USERNAME, MYSQL_PASSWORD);
-    if (!$con){die('Could not connect: ' . mysql_error());}
+    if (!$con){die('Could not connect: ' . mysqli_connect_error());}
     $sql = "REVOKE ALL PRIVILEGES ON `{$user}`.* FROM '{$user}'@'{$host}';";
     $result = mysqli_query($con, $sql);
     $sql = "DROP USER '{$user}'@'{$host}';";
@@ -445,7 +445,7 @@ function op_mysql_del() {
 // MYSQL 列表
 function mysql_list() {
   $con = mysqli_connect(MYSQL_HOSTNAME, MYSQL_USERNAME, MYSQL_PASSWORD);
-  if (!$con){die('Could not connect: ' . mysql_error());}
+  if (!$con){die('Could not connect: ' . mysqli_connect_error());}
   $result = mysqli_query($con, 'SELECT User, Host, Password FROM mysql.user');
   $data = array();
   while($row = $result->fetch_array(MYSQLI_ASSOC)){
@@ -458,7 +458,7 @@ function mysql_list() {
 // 统计数据库容量
 function mysql_count($dbname) {
   $con = mysqli_connect(MYSQL_HOSTNAME, MYSQL_USERNAME, MYSQL_PASSWORD);
-  if (!$con){die('Could not connect: ' . mysql_error());}
+  if (!$con){die('Could not connect: ' . mysqli_connect_error());}
   $result = mysqli_query($con, "SELECT sum(DATA_LENGTH)+sum(INDEX_LENGTH) as count FROM information_schema.TABLES where TABLE_SCHEMA='{$dbname}';");
   $data = array();
   $row = $result->fetch_array(MYSQLI_ASSOC);
