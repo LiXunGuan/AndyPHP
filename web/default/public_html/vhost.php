@@ -355,7 +355,7 @@ function op_ftp_del() {
     $id = from($_GET, 'id');
     $force = from($_GET, 'force');
     $list = ftp_list();
-    if ($list[$id]['username']) return "<div class='alert alert-danger'>系统账号不能删除</div>";
+    if ($list[$id]['username'] == 'root') return "<div class='alert alert-danger'>系统账号不能删除</div>";
     if ($force) {
       deldir($list[$id]['dir']);
     }
