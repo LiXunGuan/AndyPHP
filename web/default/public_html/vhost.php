@@ -116,7 +116,7 @@ ajax();
           <th width="15%">名字</th>
           <th>绑定域名</th>
           <th>目录</th>
-          <th>创建时间</th>
+          <th width="15%">创建时间</th>
           <th width="15%">操作</th>
         </tr>
       </thead>
