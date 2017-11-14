@@ -1,5 +1,14 @@
 <?php
-// error_reporting(0);
+$username = 'admin';
+$password = 'admin';
+switch (true) {
+    case !isset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']):
+    case $_SERVER['PHP_AUTH_USER'] !== $username:
+    case $_SERVER['PHP_AUTH_PW']   !== $password:
+        header('WWW-Authenticate: Basic realm="Enter username and password."');
+        header('Content-Type: text/plain; charset=utf-8');
+        die('Enter username and password.');
+}
 ini_set('max_execution_time', '0');
 ini_set('memory_limit','10240M');
 $host = 'localhost';
