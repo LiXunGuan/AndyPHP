@@ -48,9 +48,13 @@ Apache：
     CustomLog "|bin/rotatelogs.exe logs/access_%Y%m%d.log 86400 480" common
 2.1.4 修改 LogLevel warn 到 LogLevel crit
 2.2.5 修改 DocumentRoot "c:/Apache24/htdocs" 前面加入 # 号
-2.2.6 修改 #LoadModule deflate_module modules/mod_deflate.so 去除前面 # 号
-2.2.7 修改 #LoadModule filter_module modules/mod_filter.so 去除前面 # 号
-2.4.8 修改 #LoadModule rewrite_module modules/mod_rewrite.so 去除前面 # 号
+2.2.6 在 #LoadModule xml2enc_module modules/mod_xml2enc.so 后面加入
+LoadModule deflate_module modules/mod_deflate.so
+LoadModule filter_module modules/mod_filter.so
+LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+
 2.3. 删除
 <Directory />
     AllowOverride none
