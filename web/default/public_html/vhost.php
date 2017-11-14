@@ -101,7 +101,7 @@ ajax();
         </div>
 
         <br>
-        <button type="submit" class="btn btn-default">增加</button>
+        <button type="submit" class="btn btn-default">保存</button>
       </form>
 
       <br>
@@ -113,8 +113,8 @@ ajax();
       <thead>
         <tr>
           <th width="5%">#</th>
-          <th width="15%">域名</th>
-          <th>别名</th>
+          <th width="15%">名字</th>
+          <th>绑定域名</th>
           <th>目录</th>
           <th>创建时间</th>
           <th width="15%">操作</th>
@@ -334,7 +334,7 @@ function op_ftp_add() {
     if (!$dir) return "<div class='alert alert-danger'>请填写目录</div>";
 
     $list = ftp_list();
-    $salt = '123';
+    $salt = rand();
     $password = strtoupper(hash("sha512", $password . $salt));
     $dir1 = substr($_SERVER['DOCUMENT_ROOT'], 0, -19). $dir;
     $list[] = array(
@@ -355,6 +355,7 @@ function op_ftp_del() {
     $id = from($_GET, 'id');
     $force = from($_GET, 'force');
     $list = ftp_list();
+    if ($list[$id]['username']) return "<div class='alert alert-danger'>系统账号不能删除</div>";
     if ($force) {
       deldir($list[$id]['dir']);
     }
