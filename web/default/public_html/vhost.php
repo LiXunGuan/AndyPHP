@@ -129,7 +129,7 @@ ajax();
             echo "<a href='http://{$val}' target='_blank'>{$val}</a> ";
           } ?></td>
           <td><?php echo WWW_DIR . $value['dir'] . '/public_html' ?></td>
-          <td><?php echo date("Y-m-d H:i", filectime(WWW_DIR . $value['dir'])) ?></td>
+          <td><?php echo $value['create_time'] ?></td>
           <td>
             <a href="javascript:if(confirm('是否要删除所选域名？'))window.location='?act=vhost_del&domain=<?php echo $key ?>'">删除</a>
             <a href="javascript:if(confirm('是否要删除所选域名？强制删除将会删除所有文件。'))window.location='?act=vhost_del&force=1&domain=<?php echo $key ?>'">删除并清空</a>
@@ -245,9 +245,12 @@ function vhost_list() {
         'domain' => ($domain) ? $domain : "localhost",
         'alias' => $alias,
         'dir' => trim($dir),
+        'create_time' => date('Y-m-d H:i:s', filectime($fullpath))
       );
     }
   }
+  $items = multi_array_sort($items, 'create_time');
+
   return $items;
 }
 
@@ -502,6 +505,15 @@ function from($array, $key, $default = FALSE)
   return $return;
 }
 
+// 二维数组排序
+function multi_array_sort($arr, $key, $short = SORT_ASC) {
+    // $short = SORT_ASC, SORT_DESC
+    foreach ($arr as $k => $v) {
+        $name[$k] = $v[$key];
+    }
+    array_multisort($name, SORT_REGULAR, $short, $arr);
+    return $arr;
+}
 ?>
 <script type="text/javascript">
   function ajax_restart(obj) {
