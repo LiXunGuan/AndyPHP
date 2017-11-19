@@ -62,6 +62,7 @@ LoadModule proxy_http_module modules/mod_proxy_http.so
 </Directory>
 2.4.
 最后在底部加入
+HttpProtocolOptions unsafe
 ServerName localhost:80
 AddType application/x-httpd-php .php
 LoadModule php5_module ../php/php5apache2_4.dll
