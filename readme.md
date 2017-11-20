@@ -42,26 +42,22 @@ Apache：
 1. 到 https://www.apachelounge.com/download/ 下载 Apache 2.x.xx Win64 版，解压放到目录里，命名为 apache
 2. 编辑 Apache24\conf\httpd.conf
 2.1.1 ServerRoot "c:/Apache24" 前面加入 # 号
-2.1.2 ErrorLog "logs/error.log" 前面加入 # 号
-2.1.3 CustomLog "logs/access.log" common 前面加入 # 号，后面加入
-    LogFormat "%V %U %b" common
-    CustomLog "|bin/rotatelogs.exe logs/access_%Y%m%d.log 86400 480" common
-2.1.4 修改 LogLevel warn 到 LogLevel crit
 2.2.5 修改 DocumentRoot "c:/Apache24/htdocs" 前面加入 # 号
-2.2.6 在 #LoadModule xml2enc_module modules/mod_xml2enc.so 后面加入
-LoadModule deflate_module modules/mod_deflate.so
-LoadModule filter_module modules/mod_filter.so
-LoadModule rewrite_module modules/mod_rewrite.so
-LoadModule proxy_module modules/mod_proxy.so
-LoadModule proxy_http_module modules/mod_proxy_http.so
 
 2.3. 删除
 <Directory />
     AllowOverride none
     Require all denied
 </Directory>
-2.4.
-最后在底部加入
+2.4. 最后在底部加入
+LogFormat "%V %U %b" count
+CustomLog "|bin/rotatelogs.exe logs/access_%Y%m%d.log 86400 480" count
+LoadModule ratelimit_module modules/mod_ratelimit.so
+LoadModule deflate_module modules/mod_deflate.so
+LoadModule filter_module modules/mod_filter.so
+LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
 HttpProtocolOptions unsafe
 ServerName localhost:80
 AddType application/x-httpd-php .php
