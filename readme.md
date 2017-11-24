@@ -64,6 +64,10 @@ AddType application/x-httpd-php .php
 LoadModule php5_module ../php/php5apache2_4.dll
 PHPIniDir ../php
 Include conf/vhost/*.conf
+<IfModule mod_ratelimit.c>
+    SetOutputFilter RATE_LIMIT
+    SetEnv rate-limit 100
+</IfModule>
 
 2.5 在 apache\conf\ 新建目录 vhost ，新建文件 00000.default.conf 写入以下内容
 <VirtualHost *:80>
