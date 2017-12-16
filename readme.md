@@ -58,6 +58,7 @@ LoadModule filter_module modules/mod_filter.so
 LoadModule rewrite_module modules/mod_rewrite.so
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
+LoadModule headers_module modules/mod_headers.so
 HttpProtocolOptions unsafe
 ServerName localhost:80
 AddType application/x-httpd-php .php
