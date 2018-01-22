@@ -47,14 +47,14 @@ ajax();
         <input type="checkbox" name="op[vhost]" value="vhost" checked> 虚拟主机：
         <div class="form-group">
           <label >
-            域名
+            名字
             <input type="text" class="form-control" value="1.lvh.me" name="vhost_domain">
           </label>
         </div>
         <div class="form-group">
           <label >
-            别名
-            <input type="text" class="form-control" value="" name="vhost_alias">
+            绑定域名
+            <input type="text" class="form-control" value="" name="vhost_alias" style="width: 410px">
           </label>
         </div>
         <div class="form-group">
@@ -133,6 +133,7 @@ ajax();
           <td>
             <a href="javascript:if(confirm('是否要删除所选域名？'))window.location='?act=vhost_del&domain=<?php echo $key ?>'">删除</a>
             <a href="javascript:if(confirm('是否要删除所选域名？强制删除将会删除所有文件。'))window.location='?act=vhost_del&force=1&domain=<?php echo $key ?>'">删除并清空</a>
+            <a href="#" onclick='javascript:$("input[name=vhost_domain]").val("<?php echo $value['domain'] ?>");$("input[name=vhost_alias]").val("<?php echo $value['alias'] ?>");$("input[name=vhost_dir]").val("<?php echo $value['dir'] ?>");scroll(0,0);'>修改</a>
           </td>
         </tr>
       <?php endforeach; ?>
@@ -461,13 +462,14 @@ function mysql_list() {
 
 // 统计数据库容量
 function mysql_count($dbname) {
-  $con = mysqli_connect(MYSQL_HOSTNAME, MYSQL_USERNAME, MYSQL_PASSWORD);
-  if (!$con){die('Could not connect: ' . mysqli_connect_error());}
-  $result = mysqli_query($con, "SELECT sum(DATA_LENGTH)+sum(INDEX_LENGTH) as count FROM information_schema.TABLES where TABLE_SCHEMA='{$dbname}';");
-  $data = array();
-  $row = $result->fetch_array(MYSQLI_ASSOC);
-  mysqli_close($con);
-  return round($row['count'] / 1024 / 1024, 2) . " MB";
+  return 0;
+  // $con = mysqli_connect(MYSQL_HOSTNAME, MYSQL_USERNAME, MYSQL_PASSWORD);
+  // if (!$con){die('Could not connect: ' . mysqli_connect_error());}
+  // $result = mysqli_query($con, "SELECT sum(DATA_LENGTH)+sum(INDEX_LENGTH) as count FROM information_schema.TABLES where TABLE_SCHEMA='{$dbname}';");
+  // $data = array();
+  // $row = $result->fetch_array(MYSQLI_ASSOC);
+  // mysqli_close($con);
+  // return round($row['count'] / 1024 / 1024, 2) . " MB";
 }
 
 // 重启服务 
