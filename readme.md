@@ -86,10 +86,7 @@ DocumentRoot ../web/default/public_html
 PHP：
 1. 到 http://windows.php.net/download/ 下载 VC11 x64 Thread Safe 版，解压放到目录里，命名为 php
 2. php.ini-development 复制到 php.ini
-3. 修改文件 php.ini
-# extension_dir = "ext" 改为 extension_dir = "../php/ext"
-;date.timezone = 改为 date.timezone = Asia/Shanghai
-下面直接覆盖
+3. 修改文件 php.ini，下面直接覆盖
 extension=php_bz2.dll
 extension=php_curl.dll
 extension=php_fileinfo.dll
@@ -114,6 +111,9 @@ extension=php_pdo_mysql.dll
 extension=php_pdo_sqlite.dll
 ;extension=php_pgsql.dll
 ;extension=php_shmop.dll
+extension_dir = "../php/ext"
+date.timezone = Asia/Shanghai
+upload_tmp_dir = "../temp"
 
 4. libssh2.dll 复制到 Apache24\bin 目录。
 
