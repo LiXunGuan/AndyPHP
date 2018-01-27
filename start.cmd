@@ -20,6 +20,9 @@ pause
 goto :eof
 
 :start_apache
+COPY php\libssh2.dll C:\Windows\System32\libssh2.dll
+COPY php\libeay32.dll C:\Windows\System32\libeay32.dll
+COPY php\ssleay32.dll C:\Windows\System32\ssleay32.dll
 apache\bin\httpd -t
 apache\bin\httpd -k install -n .apache
 net start .apache
