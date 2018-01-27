@@ -112,6 +112,7 @@ extension=php_pdo_sqlite.dll
 extension_dir = "../php/ext"
 date.timezone = Asia/Shanghai
 upload_tmp_dir = "../temp"
+always_populate_raw_post_data = -1
 
 4. libssh2.dll 复制到 Apache24\bin 目录。
 
