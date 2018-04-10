@@ -15,6 +15,10 @@ phpMyAdmin-4.7.5-all-languages
 
 Adminer 4.3.1
 
+Caddy v0.10.12_windows_amd64_custom_personal with hook.service plugin
+
+Syncthing windows-amd64-v0.14.46
+
 ## 下载
 https://github.com/mingfunwong/AndyPHP/archive/master.zip
 
@@ -38,7 +42,7 @@ https://github.com/mingfunwong/AndyPHP/archive/master.zip
 ```
 Apache：
 1. 到 https://www.apachelounge.com/download/ 下载 Apache 2.x.xx Win64 版，解压放到目录里，命名为 apache
-2. 编辑 Apache24\conf\httpd.conf
+2. 编辑 apahce\conf\httpd.conf
 2.1.1 ServerRoot "c:/Apache24" 前面加入 # 号
 2.2.5 修改 DocumentRoot "c:/Apache24/htdocs" 前面加入 # 号
 
@@ -119,6 +123,7 @@ always_populate_raw_post_data = -1
 MariaDB：
 1. 到 https://downloads.mariadb.org/ 下载 MariaDB 10.x Series 版，解压放到目录里，命名为 mysql
 2. 复制 my-medium.ini 为 my.ini
+3. 删除 mysql\mysql-test 目录
 
 FileZilla Server：
 1. 到 https://filezilla-project.org/download.php?type=server 下载安装到目录，命名为 ftp
@@ -130,4 +135,11 @@ phpMyAdmin：
 
 Adminer：
 1. 到 https://www.adminer.org/#download 下载 Adminer 4.x.x 版，放到 web\default 目录里
+
+Caddy：
+1. 到 https://caddyserver.com/download 下载，勾选 hook.service 插件
+
+Syncthing：
+1. 到 https://github.com/syncthing/syncthing/releases/latest 下载 syncthing-windows-amd64-v0.xx.xx.zip
+
 ```
