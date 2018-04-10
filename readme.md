@@ -84,6 +84,7 @@ DocumentRoot ../web/default/public_html
     Allow from all
 </Directory>
 
+3. 删除 apache\manual 、 apache\icons 目录
 
 PHP：
 1. 到 http://windows.php.net/download/ 下载 VC11 x64 Thread Safe 版，解压放到目录里，命名为 php
@@ -123,7 +124,7 @@ always_populate_raw_post_data = -1
 MariaDB：
 1. 到 https://downloads.mariadb.org/ 下载 MariaDB 10.x Series 版，解压放到目录里，命名为 mysql
 2. 复制 my-medium.ini 为 my.ini
-3. 删除 mysql\mysql-test 目录
+3. 删除 mysql\mysql-test 、 mysql\sql-bench 目录
 
 FileZilla Server：
 1. 到 https://filezilla-project.org/download.php?type=server 下载安装到目录，命名为 ftp
